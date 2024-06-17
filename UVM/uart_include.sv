@@ -1,8 +1,8 @@
-    `include "uart_trans.svh"
+    `include "uart_trans.sv"
     
-    `include "uart_sequence.svh"
+    `include "uart_sequence.sv"
     
-    `include "uart_mon.svh"
-    `include "uart_driver.svh"
+    `include "uart_mon.sv"
+    `include "uart_driver.sv"
 
-    `include "uart_agent.svh"
+    `include "uart_agent.sv"
