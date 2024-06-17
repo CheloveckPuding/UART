@@ -1,8 +1,8 @@
 `timescale 1 ps/ 1 ps
 
-interface uart_intf;
+interface uart_intf(input clk);
   
-  logic clk,rst;
+  logic rst;
   logic rx;
 	logic [7:0] tx_data_in;
 	logic start;
