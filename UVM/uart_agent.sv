@@ -11,6 +11,7 @@ class uart_agent extends uvm_agent;
     endfunction
  
     function void build_phase(uvm_phase phase);
+      super.build_phase(phase);
       seqr = uart_sequencer::type_id::create("seqr", this);
       driv = uart_driver::type_id::create("driv", this);
       mon = uart_mon::type_id::create("mon", this);

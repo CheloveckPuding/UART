@@ -14,6 +14,8 @@ import uvm_pkg::*;
      logic             stop_bit_num;
      logic [7:0]       rx_data_out;
      logic             parity_bit;
+
+     constraint c1 {delitel > 0;delitel <= 15;};
   
    
     function new (string name = "uart_trans");
