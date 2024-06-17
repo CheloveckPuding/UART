@@ -54,6 +54,7 @@
         end       
         seq_item_port.item_done();
         no_transactions++;
+    end
     endtask
 
   endclass: uart_driver
