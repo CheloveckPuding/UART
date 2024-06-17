@@ -12,22 +12,22 @@
       super.new(name);
     endfunction
 
-    task body;
-      if (starting_phase != null)
-        starting_phase.raise_objection(this);
-        void'(uvm_config_db #(int)::get(null,"","no_of_transactions",count));
-      repeat(count)
-      begin
-        req = uart_trans::type_id::create("req");
-        start_item(req);
-        if( !req.randomize() )
-          `uvm_error("", "Randomize failed")
-        finish_item(req);
-      end
+    // task body;
+    //   if (starting_phase != null)
+    //     starting_phase.raise_objection(this);
+    //     void'(uvm_config_db #(int)::get(null,"","no_of_transactions",count));
+    //   repeat(count)
+    //   begin
+    //     req = uart_trans::type_id::create("req");
+    //     start_item(req);
+    //     if( !req.randomize() )
+    //       `uvm_error("", "Randomize failed")
+    //     finish_item(req);
+    //   end
       
-      if (starting_phase != null)
-        starting_phase.drop_objection(this);
-    endtask: body
+    //   if (starting_phase != null)
+    //     starting_phase.drop_objection(this);
+    // endtask: body
    
   endclass: uart_sequence
   

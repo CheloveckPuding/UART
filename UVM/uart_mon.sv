@@ -4,6 +4,7 @@ class uart_mon extends uvm_monitor;
 	uart_trans trans;
 	uvm_analysis_port #(uart_trans) ap_port;
 	`uvm_component_utils(uart_mon)
+	int count_data;
 	
 	function new(string name="", uvm_component parent);
 		super.new(name, parent);
@@ -23,19 +24,24 @@ class uart_mon extends uvm_monitor;
 
   
   task run_phase(uvm_phase phase);
-    while(1) begin
-      @(posedge intf.clk);
-      trans = uart_trans::type_id::create("trans");
-      trans.start = intf.start;
-      trans.tx_active = intf.tx_active;
-      trans.done_tx = intf.done_tx;
-      trans.tx_data_in = intf.tx_data_in;
-      trans.rx = intf.rx;
-      trans.rx_data_out = intf.rx_data_out;
-      trans.tx = intf.tx;
-      ap_port.write(trans);
+		forever
+		begin 
+			@(negedge intf.rx)
+			repeat(8)begin
+	            repeat(trans.delitel) begin
+	                @(posedge vif.clk);
+	            end
+	            if (count_data >= 0 && count_data <=7) begin
+	                trans.rx_data_out <= {vif.rx, trans.rx_data_out[7:1]};
+	                count_data++;
+	            end
+	            else if (count_data == 8) begin
+	                trans.parity_bit <= vif.rx;
+	                count_data++;
+	            end
+        	end       
+      	ap_port.write(trans);
     end
   endtask
-  
-  
+
 endclass
