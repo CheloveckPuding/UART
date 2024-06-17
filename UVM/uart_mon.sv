@@ -15,7 +15,7 @@ class uart_mon extends uvm_monitor;
 	  super.build_phase(phase);
 	  ap_port = new("ap_port",this);
 	  trans = uart_trans::type_id::create("trans");
-		if(!uvm_config_db #(virtual uart_intf)::get(this, "", "uart_vif", vif)) 
+		if(!uvm_config_db #(virtual uart_intf)::get(this, "", "vif", vif)) 
 		   begin
 		    `uvm_error("ERROR::", "UVM_CONFIG_DB FAILED in uart_mon")
 		    end

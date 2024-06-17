@@ -16,41 +16,41 @@
     
     function void build_phase(uvm_phase phase);
       // Get interface reference from config database
-      if( !uvm_config_db #(virtual uart_intf)::get(this, "", "uart_intf", vif) )
+      if( !uvm_config_db #(virtual uart_intf)::get(this, "", "vif", vif) )
         `uvm_error("", "uvm_config_db::get failed")
     endfunction 
    
     task run_phase(uvm_phase phase);
-      forever
-      begin
-        seq_item_port.get_next_item(req);
-        // tx
-        vif.tx <= 0;
-        count_data = 0;
-        repeat($size(req.tx_data_in)+1+req.stop_bit_num)begin
-            repeat(req.delitel) begin
-                @(posedge vif.clk);
-            end
-            if (count_data >= 0 && count_data <=7) begin
-                vif.tx <= req.tx_data_in[count_data];
-                count_data++;
-            end
-            else if (count_data == 8) begin
-                case (req.parity_bit_mode)
-                    3'h0: vif.tx <= 0;
-                    3'h1: vif.tx <= 1;
-                    3'h2: vif.tx <= ~(^req.tx_data_in);
-                    3'h3: vif.tx <= ^req.tx_data_in;
-                endcase
-                count_data++;
-            end
-            else begin
-                vif.tx <= 1;
-            end
-        end       
-        seq_item_port.item_done();
-        no_transactions++;
-    end
+        forever
+        begin
+            seq_item_port.get_next_item(req);
+            // tx
+            vif.tx <= 0;
+            count_data = 0;
+            repeat($size(req.tx_data_in)+1+req.stop_bit_num)begin
+                repeat(req.delitel) begin
+                    @(posedge vif.clk);
+                end
+                if (count_data >= 0 && count_data <=7) begin
+                    vif.tx <= req.tx_data_in[count_data];
+                    count_data++;
+                end
+                else if (count_data == 8) begin
+                    case (req.parity_bit_mode)
+                        3'h0: vif.tx <= 0;
+                        3'h1: vif.tx <= 1;
+                        3'h2: vif.tx <= ~(^req.tx_data_in);
+                        3'h3: vif.tx <= ^req.tx_data_in;
+                    endcase
+                    count_data++;
+                end
+                else begin
+                    vif.tx <= 1;
+                end
+            end       
+            seq_item_port.item_done();
+            no_transactions++;
+        end
     endtask
 
   endclass: uart_driver
