@@ -4,10 +4,6 @@
   
     `uvm_component_utils(uart_driver)
 
-    parameter clk_freq = 50000000; //MHz
-    parameter baud_rate = 19200; //bits per second
-    localparam clock_divide = (clk_freq/baud_rate);
-
     virtual uart_intf vif;
     reg [7:0] data;
     int no_transactions;
