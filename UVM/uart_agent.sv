@@ -16,10 +16,10 @@ class uart_agent extends uvm_agent;
       mon = uart_mon::type_id::create("mon", this);
     endfunction
     
-    // function void connect_phase(uvm_phase phase);
-    //   driv.seq_item_port.connect( seqr.seq_item_export);
-    //   mon.ap_port.connect(cov.analysis_export);
-    // endfunction
+    function void connect_phase(uvm_phase phase);
+      driv.seq_item_port.connect( seqr.seq_item_export);
+      // mon.ap_port.connect(cov.analysis_export);
+    endfunction
     
 
 endclass

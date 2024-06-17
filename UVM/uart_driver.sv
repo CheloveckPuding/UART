@@ -23,6 +23,7 @@
     task run_phase(uvm_phase phase);
         forever
         begin
+            uart_trans req;
             seq_item_port.get_next_item(req);
             // tx
             vif.tx <= 0;
