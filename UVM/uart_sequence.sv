@@ -1,16 +1,17 @@
 `timescale 1 ps/ 1 ps
 
-  typedef uvm_sequencer #(uart_trans) uart_sequencer;
-
-
-  class uart_sequence extends uvm_sequence #(uart_trans);
+class uart_sequencer extends uvm_sequencer #(uart_trans);
   
-    `uvm_object_utils(uart_sequence)
+    `uvm_object_utils(uart_sequencer)
     int count;
     
     function new (string name = ""); 
       super.new(name);
     endfunction
+
+      function void build_phase (uvm_phase phase);
+        super.build_phase(phase);
+      endfunction
 
     // task body;
     //   if (starting_phase != null)
@@ -29,5 +30,5 @@
     //     starting_phase.drop_objection(this);
     // endtask: body
    
-  endclass: uart_sequence
+  endclass: uart_sequencer
   

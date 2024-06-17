@@ -16,7 +16,7 @@ import uvm_pkg::*;
      logic             parity_bit;
   
    
-    function new (string name = "");
+    function new (string name = "uart_trans");
       super.new(name);
     endfunction
     
