@@ -1,6 +1,6 @@
 class uart_mon extends uvm_monitor;
 	
-	virtual uart_intf vif;
+	virtual uart_intf uart_intf_u;
 	uart_trans trans;
 	uvm_analysis_port #(uart_trans) ap_port;
 	`uvm_component_utils(uart_mon)
@@ -15,7 +15,7 @@ class uart_mon extends uvm_monitor;
 	  super.build_phase(phase);
 	  ap_port = new("ap_port",this);
 	  trans = uart_trans::type_id::create("trans");
-		if(!uvm_config_db #(virtual uart_intf)::get(this, "", "vif", vif)) 
+		if(!uvm_config_db #(virtual uart_intf)::get(this, "", "uart_intf_u", uart_intf_u)) 
 		   begin
 		    `uvm_error("ERROR::", "UVM_CONFIG_DB FAILED in uart_mon")
 		    end
@@ -26,17 +26,17 @@ class uart_mon extends uvm_monitor;
   task run_phase(uvm_phase phase);
 		forever
 		begin 
-			@(negedge vif.rx)
+			@(negedge uart_intf_u.rx)
 			repeat(8)begin
 	            repeat(trans.delitel) begin
-	                @(posedge vif.clk);
+	                @(posedge uart_intf_u.clk);
 	            end
 	            if (count_data >= 0 && count_data <=7) begin
-	                trans.rx_data_out <= {vif.rx, trans.rx_data_out[7:1]};
+	                trans.rx_data_out <= {uart_intf_u.rx, trans.rx_data_out[7:1]};
 	                count_data++;
 	            end
 	            else if (count_data == 8) begin
-	                trans.parity_bit <= vif.rx;
+	                trans.parity_bit <= uart_intf_u.rx;
 	                count_data++;
 	            end
         	end       
