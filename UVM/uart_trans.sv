@@ -8,14 +8,14 @@ import uvm_pkg::*;
   
     `uvm_object_utils(uart_trans)
 
-	   rand bit   [7:0 ] tx_data_in;
-     logic [31:0]      delitel;
-     logic [2:0 ]      parity_bit_mode;
-     logic             stop_bit_num;
-     logic [7:0]       rx_data_out;
-     logic             parity_bit;
+     rand bit   [7:0 ]      tx_data_in;
+     rand logic [31:0]      delitel;
+     rand logic [2:0 ]      parity_bit_mode;
+     rand logic             stop_bit_num;
+     rand logic [7:0]       rx_data_out;
+     rand logic             parity_bit;
 
-     constraint c1 {delitel > 0;delitel <= 15;};
+     constraint c1 {soft delitel[31:0]>32'h0; soft delitel[31:0]<=32'h15;};
   
    
     function new (string name = "uart_trans");

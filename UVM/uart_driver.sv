@@ -21,14 +21,14 @@
     endfunction 
    
     task run_phase(uvm_phase phase);
+        vif.tx <= 0;
+        count_data = 0;
         forever
         begin
             uart_trans req;
             seq_item_port.get_next_item(req);
             // tx
-            vif.tx <= 0;
-            count_data = 0;
-            repeat($size(req.tx_data_in)+1+req.stop_bit_num)begin
+            repeat($size(req.tx_data_in)+2+req.stop_bit_num)begin
                 repeat(req.delitel) begin
                     @(posedge vif.clk);
                 end
@@ -55,18 +55,3 @@
     endtask
 
   endclass: uart_driver
-  
-
-
-
-  /*
-  1. Сделать счётчик для uart_ce
-  2. Сделать конфиг секвенции
-  3. Сделать передачу данных
-  3.1 Каждый counter == clock_divide передавать бит в intf
-  3.2 Каждый раз увеличивать counter_bits
-  3.3 Counter_bits == $size(data_from_seq)
-  3.4 Считать до тех пор, пока не дойдём до 3.4
-  3.5 Передавать вот таким образом vif.tx = data_from_seq[counter_bits]
-  3.6 data_from_seq - будет просто массивом, который будет создаваться при sequence_item
-  */
