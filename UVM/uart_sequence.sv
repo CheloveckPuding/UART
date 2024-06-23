@@ -1,13 +1,19 @@
-class uart_sequencer extends uvm_sequencer#(uart_trans);
+class uvm_uart_cfg_sequence extends uvm_sequence#(uart_trans);
   
-  `uvm_component_utils(uart_sequencer)
-  
-  function new ( string name, uvm_component parent);
-    super.new(name,parent);
+  `uvm_object_utils(uvm_uart_cfg_sequence)
+
+  uart_trans transaction;
+
+  function new (string name = "");
+    super.new(name);
   endfunction
-  
-  function void build_phase (uvm_phase phase);
-    super.build_phase(phase);
-  endfunction
-  
+
+  task body();
+    begin
+      transaction = new();
+      start_item(transaction);
+      assert(transaction.randomize());
+      finish_item(transaction);
+    end
+  endtask
 endclass
