@@ -1,6 +1,6 @@
-class uvm_uart_cfg_sequence extends uvm_sequence#(uart_trans);
+class uart_sequence extends uvm_sequence#(uart_trans);
   
-  `uvm_object_utils(uvm_uart_cfg_sequence)
+  `uvm_object_utils(uart_sequence)
 
   uart_trans transaction;
 
