@@ -25,34 +25,35 @@
    
     task run_phase(uvm_phase phase);
         uart_intf_u.tx <= 1;
-        count_data = 0;
         forever
         begin
             uart_trans req;
             seq_item_port.get_next_item(req);
+            count_data = 0;
+            $display("sending data is %0h",req.tx_data_in);
             // tx
-            repeat($size(req.tx_data_in)+2+cfg.stop_bit_num)begin
+            repeat($size(req.tx_data_in)+3+cfg.stop_bit_num)begin
                 #cfg.t;
                 if (count_data >= 0 && count_data <= 8) begin
                     if (count_data == 0) begin
-                        uart_intf_u.tx <= 0;
+                        uart_intf_u.tx = 0;
                     end
                     else begin 
-                        uart_intf_u.tx <= req.tx_data_in[count_data];
+                        uart_intf_u.tx = req.tx_data_in[count_data-1];
                     end
                     count_data++;
                 end
                 else if (count_data == 9) begin
                     case (cfg.parity_bit_mode)
-                        3'h0: uart_intf_u.tx <= 0;
-                        3'h1: uart_intf_u.tx <= 1;
-                        3'h2: uart_intf_u.tx <= ~(^cfg.tx_data_in);
-                        3'h3: uart_intf_u.tx <= ^cfg.tx_data_in;
+                        3'h0: uart_intf_u.tx = 0;
+                        3'h1: uart_intf_u.tx = 1;
+                        3'h2: uart_intf_u.tx = ~(^req.tx_data_in);
+                        3'h3: uart_intf_u.tx = ^req.tx_data_in;
                     endcase
                     count_data++;
                 end
                 else begin
-                    uart_intf_u.tx <= 1;
+                    uart_intf_u.tx = 1;
                 end
             end       
             seq_item_port.item_done();
