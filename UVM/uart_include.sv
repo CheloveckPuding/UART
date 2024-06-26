@@ -1,5 +1,5 @@
-    `include "uart_trans.sv"
     `include "uart_agent_cfg.sv"
+    `include "uart_trans.sv"
     
     `include "uart_sequence.sv"
     `include "uart_sequencer.sv"
