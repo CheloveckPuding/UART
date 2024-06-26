@@ -4,8 +4,7 @@ class uart_agent extends uvm_agent;
     
     uart_sequencer seqr;
     uart_driver    driv;
-    // uart_mon mon;
-    uvm_uart_cfg_sequence cfg;
+    uart_mon mon;
     
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
@@ -15,7 +14,7 @@ class uart_agent extends uvm_agent;
       super.build_phase(phase);
       seqr = uart_sequencer::type_id::create("seqr", this);
       driv = uart_driver::type_id::create("driv", this);
-      // mon = uart_mon::type_id::create("mon", this);
+      mon = uart_mon::type_id::create("mon", this);
     endfunction
     
     function void connect_phase(uvm_phase phase);

@@ -5,7 +5,7 @@
     `uvm_component_utils(uart_driver)
 
     virtual uart_intf uart_intf_u;
-    uvm_uart_cfg_sequence cfg;
+    uart_agent_cfg cfg;
     reg [7:0] data;
     int no_transactions;
     int count_data;
@@ -19,7 +19,7 @@
       // Get interface reference from config database
       if( !uvm_config_db #(virtual uart_intf)::get(this, "", "uart_intf_u", uart_intf_u) )
         `uvm_error("", "uvm_config_db::get failed")
-      if( !uvm_config_db #(uvm_uart_cfg_sequence)::get(this, "", "cfg", cfg) )
+      if( !uvm_config_db #(uart_agent_cfg)::get(this, "", "cfg", cfg) )
             `uvm_error("", "uvm_config_db::get failed")
     endfunction 
    
