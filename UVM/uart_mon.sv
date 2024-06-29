@@ -1,4 +1,3 @@
-// class uart_agent_cfg;
 class uart_mon extends uvm_monitor;
 	`uvm_component_utils(uart_mon)
 	
@@ -27,7 +26,6 @@ class uart_mon extends uvm_monitor;
   
   task run_phase(uvm_phase phase);
   		logic start_bit;
-		$display("csg signals are delitel = %0d, stop_bit_num is %0h, parity_bit_mode = %0h", cfg.delitel, cfg.stop_bit_num, cfg.parity_bit_mode);
 		fork
 			forever
 				begin
@@ -36,12 +34,11 @@ class uart_mon extends uvm_monitor;
 					trans = uart_trans::type_id::create("trans");
 					trans.data = 0;
 					@(negedge uart_in_intf_u.rx);
-  					$display("ok",);
 					repeat(cfg.delitel/2) begin
 						@(posedge uart_in_intf_u.clk);
 					end
 					start_bit = uart_in_intf_u.rx;
-					repeat(10)begin
+					repeat(10+cfg.stop_bit_num)begin
 						repeat(cfg.delitel) begin
 							@(posedge uart_in_intf_u.clk);
 						end
@@ -50,8 +47,34 @@ class uart_mon extends uvm_monitor;
 			                count_data_rx++;
 			            end
 			            else if (count_data_rx == 8) begin
-			                trans.parity_bit = uart_in_intf_u.rx;
+			                case (cfg.parity_bit_mode)
+								3'h0: begin
+									if (uart_in_intf_u.rx != 0) begin
+										`uvm_error("UART_MON_RX", "PARITY_BIT IS IUNCORRECT");
+									end
+								end
+								3'h1: begin
+									if (uart_in_intf_u.rx != 1) begin
+										`uvm_error("UART_MON_RX", "PARITY_BIT IS IUNCORRECT");
+									end
+								end
+								3'h2: begin
+									if (uart_in_intf_u.rx != ~(^trans.data)) begin
+										`uvm_error("UART_MON_RX", "PARITY_BIT IS IUNCORRECT");
+									end
+								end
+								3'h3: begin
+									if (uart_in_intf_u.rx != ^trans.data) begin
+										`uvm_error("UART_MON_RX", "PARITY_BIT IS IUNCORRECT");
+									end
+								end
+							endcase
 			                count_data_rx++;
+			            end
+			            else begin
+			            	if (~uart_in_intf_u.rx) begin
+			            		`uvm_error("UART_MON_RX", "STOP_BIT_ERR");
+			            	end
 			            end
 		        	end
         			$display("trans_rx got is %0h", trans.data);
@@ -68,21 +91,44 @@ class uart_mon extends uvm_monitor;
 						@(posedge uart_out_intf_u.clk);
 					end
 					start_bit = uart_out_intf_u.tx;
-					repeat(10)begin
+					repeat(10+cfg.stop_bit_num)begin
 						repeat(cfg.delitel) begin
 							@(posedge uart_out_intf_u.clk);
 						end
 			            if (count_data_tx >= 0 && count_data_tx <=7) begin
 			                trans.data = {uart_out_intf_u.tx, trans.data[7:1]};
-			                $display("trans_tx is %0h",uart_out_intf_u.tx);
-			                count_data_tx++;
-			                $display("ok_counter is %0h", count_data_tx);
-							$display("trans_tx right now is  %0h", trans.data);       
+			                count_data_tx++;     
 
 			            end
 			            else if (count_data_tx == 8) begin
-			                trans.parity_bit = uart_out_intf_u.tx;
+			                case (cfg.parity_bit_mode)
+								3'h0: begin
+									if (uart_out_intf_u.tx != 0) begin
+										`uvm_error("UART_MON_TX", "PARITY ERROR")
+									end
+								end
+								3'h1: begin
+									if (uart_out_intf_u.tx != 1) begin
+										`uvm_error("UART_MON_TX", "PARITY ERROR")
+									end
+								end
+								3'h2: begin
+									if (uart_out_intf_u.tx != ~(^trans.data)) begin
+										`uvm_error("UART_MON_TX", "PARITY ERROR")
+									end
+								end
+								3'h3: begin
+									if (uart_out_intf_u.tx != ^trans.data) begin
+										`uvm_error("UART_MON_TX", "PARITY ERROR")
+									end
+								end
+							endcase
 			                count_data_tx++;
+			            end
+			            else begin
+			            	if (~uart_out_intf_u.rx) begin
+			            		`uvm_error("UART_MON_TX", "STOP_BIT_ERR");
+			            	end
 			            end
 		        	end
         			$display("trans_tx got is %0h", trans.data);       

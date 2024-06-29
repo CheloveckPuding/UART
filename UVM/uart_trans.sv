@@ -10,7 +10,6 @@ import uvm_pkg::*;
 
      rand bit   [7:0] tx_data_in;
      rand logic [7:0] data;
-     rand logic       parity_bit;
   
    
     function new (string name = "uart_trans");
@@ -18,7 +17,7 @@ import uvm_pkg::*;
     endfunction
 
     function string convert2string();
-      return $sformatf("data = %0h, \t parity = %0d", data, parity_bit);
+      return $sformatf("data = %0h", data);
     endfunction
     
   endclass: uart_trans
