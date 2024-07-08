@@ -1,5 +1,3 @@
-`timescale 1 ps/ 1 ps
-
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 

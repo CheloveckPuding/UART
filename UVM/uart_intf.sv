@@ -1,14 +1,8 @@
-`timescale 1 ps/ 1 ps
-
-interface uart_intf(input clk);
+`timescale 1ns/10ps
+interface uart_intf;
   
-  logic rst;
   logic rx;
-	logic [7:0] tx_data_in;
-	logic start;
   logic tx;
-	logic [7:0] rx_data_out;
-	logic tx_active;
-	logic done_tx; 
+
 
 endinterface

@@ -7,15 +7,15 @@ class uart_agent_cfg extends  uvm_object;
 
     parameter CLOCK_PERIOD = 10;
     
-    rand int unsigned numb_trans;
-    rand logic [31:0] delitel;
+    // rand int unsigned numb_trans;
+    // rand logic [31:0] delitel;
     rand logic [2:0]  parity_bit_mode;
     rand logic        stop_bit_num;
     rand time         t; 
 
-    constraint del    {delitel         >  0; delitel         < 15;}
+    // constraint del    {delitel         >  0; delitel         < 15;}
+    // constraint tim    {t == delitel * CLOCK_PERIOD;}
     constraint parity {parity_bit_mode >= 0; parity_bit_mode <= 3;}
-    constraint tim    {t == delitel * CLOCK_PERIOD;}
 
 
 endclass : uart_agent_cfg
